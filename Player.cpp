@@ -2,6 +2,7 @@
 #include "Game.h"
 #include "Vector.h"
 #include "Player.h"
+#include "Ball.h"
 #include "sfwdraw.h"
 
 int playerNumberCheck(int input)
@@ -23,7 +24,7 @@ int playerNumberCheck(int input)
 	}
 }
 
-Player createPlayer(int playerNum)
+Player createPlayer(int playerNum, bool isPlayer)
 {
 	//This function defines the player variables and gets the players initials.
 	Player tempPlayer;
@@ -34,15 +35,25 @@ Player createPlayer(int playerNum)
 
 	char thirdInitial;
 
+	if (isPlayer == true)
+	{
+		std::cout << "Please input initials player " << playerNum << "." << std::endl;
 
-	std::cout << "Please input initials player " << playerNum << "." << std::endl;
-
-	std::cin >> firstInitial >> secondInitial >> thirdInitial;
+		std::cin >> firstInitial >> secondInitial >> thirdInitial;
 
 
-	tempPlayer.name[0] = firstInitial;
-	tempPlayer.name[1] = secondInitial;
-	tempPlayer.name[2] = thirdInitial;
+		tempPlayer.name[0] = firstInitial;
+		tempPlayer.name[1] = secondInitial;
+		tempPlayer.name[2] = thirdInitial;
+	}
+	else
+	{
+		tempPlayer.name[0] = 'b';
+		tempPlayer.name[1] = 'o';
+		tempPlayer.name[2] = 't';
+	}
+
+	tempPlayer.name[3] = '\0';
 
 	tempPlayer.score = 0;
 	tempPlayer.ID = playerNum;
@@ -73,7 +84,7 @@ Player createPlayer(int playerNum)
 	return tempPlayer;
 }
 
-Player movePlayer(Player p)
+Player movePlayer(Player p, Ball b, bool isPlayer)
 {
 	//Formatting inspired by the "sfwexample.cpp" included in the SFW library.
 	//This function sets the players acceleration according to key input
@@ -86,16 +97,22 @@ Player movePlayer(Player p)
 	tempPlayer.acc.y = 0;
 
 
-	if (tempPlayer.ID == 1)
+	if (tempPlayer.ID == 1 && isPlayer == true)
 	{
 		if (sfw::getKey('w')) tempPlayer.acc.y = -PADDLE_SPEED;
 		else if (sfw::getKey('s')) tempPlayer.acc.y = PADDLE_SPEED;
 	}
 
-	if (tempPlayer.ID == 2)
+	if (tempPlayer.ID == 2 && isPlayer == true)
 	{
 		if (sfw::getKey('i')) tempPlayer.acc.y = -PADDLE_SPEED;
 		else if (sfw::getKey('k')) tempPlayer.acc.y = PADDLE_SPEED;
+	}
+
+	if (isPlayer == false)
+	{
+		if (b.pos.y <= tempPlayer.pos.y + tempPlayer.size.y / 3) tempPlayer.acc.y = -PADDLE_SPEED;
+		else if(b.pos.y >= tempPlayer.pos.y + tempPlayer.size.y - (tempPlayer.size.y / 3)) tempPlayer.acc.y = PADDLE_SPEED;
 	}
 
 
@@ -132,7 +149,7 @@ Player movePlayer(Player p)
 	return tempPlayer;
 }
 
-void scoreCheck(Player &leftPlayer, Player &rightPlayer, Ball &b)
+bool scoreCheck(Player &leftPlayer, Player &rightPlayer, Ball &b)
 {
 	if (b.pos.x > SCREEN_WIDTH)
 	{
@@ -154,4 +171,18 @@ void scoreCheck(Player &leftPlayer, Player &rightPlayer, Ball &b)
 		b.vel.x = BALL_DEFAULT_SPEED;
 		b.vel.y = 0;
 	}
+
+	if (leftPlayer.score == VICTORY_SCORE)
+	{
+		std::cout << leftPlayer.name << " wins!" << std::endl;
+		sfw::termContext();
+		return false;
+	}
+	if (rightPlayer.score == VICTORY_SCORE)
+	{
+		std::cout << rightPlayer.name << " wins!" << std::endl;
+		sfw::termContext();
+		return false;
+	}
+	return true;
 }

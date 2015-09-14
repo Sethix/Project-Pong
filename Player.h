@@ -15,17 +15,17 @@ struct Player
 	int ID;
 };
 
-Player createPlayer(int playerNum);
+Player createPlayer(int playerNum, bool isPlayer);
 
-Player movePlayer(Player p);
+Player movePlayer(Player p, Ball b, bool isPlayer);
 
 Ball ballCollision(Ball b, Player p);
 
-void scoreCheck(Player &leftPlayer, Player &rightPlayer, Ball &b);
+bool scoreCheck(Player &leftPlayer, Player &rightPlayer, Ball &b);
 
 int playerNumberCheck(int input);
 
-void singlePlayerGame(Player p1, Ball b);
+void singlePlayerBotGame(Player p1, Ball b);
 
 void twoPlayerGame(Player p1, Player p2, Ball b);
 

@@ -73,9 +73,9 @@ Ball ballCollision(Ball b, Player p)
 			tempBall.pos.x = tempPlayer.pos.x + tempPlayer.size.x + 1;
 			tempBall.vel.x += -BALL_ADDITIONAL_SPEED;
 			if (tempBall.pos.y >= tempPlayer.pos.y && tempBall.pos.y <= tempPlayer.pos.y + (tempPlayer.size.y / 3))
-				tempBall.vel.y -= BALL_ADDITIONAL_SPEED * 2;
+				tempBall.vel.y -= BALL_VERTICAL_SPEED;
 			if (tempBall.pos.y <= tempPlayer.pos.y + tempPlayer.size.y && tempBall.pos.y >= tempPlayer.pos.y + ((tempPlayer.size.y / 3) * 2))
-				tempBall.vel.y += BALL_ADDITIONAL_SPEED * 2;
+				tempBall.vel.y += BALL_VERTICAL_SPEED;
 		}
 		tempBall.vel.x = -tempBall.vel.x;
 	}

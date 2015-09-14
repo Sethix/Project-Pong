@@ -37,8 +37,10 @@ int main()
 	ball = createBall();
 
 
-	if (numOfPlayers == 1) singlePlayerGame(player[0], ball);
+	if (numOfPlayers == 1) singlePlayerBotGame(player[0], ball);
 	else if (numOfPlayers == 2) twoPlayerGame(player[0], player[1], ball);
+
+	system("Pause");
 	
 	return 0;
 }
